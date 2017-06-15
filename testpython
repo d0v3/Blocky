@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+
+import commands
+import sys
+import os
+
+
+def main():
+
+	print sys.argv[1]
+	URL = sys.argv[1]
+
+	DigOutput = commands.getoutput("dig "+URL)
+
+	AnswerSectionStart = DigOutput.find("ANSWER SECTION:")
+	AnswerSectionEnd = DigOutput.find(";;", AnswerSectionStart)
+
+	AnswerSection = DigOutput[AnswerSectionStart:AnswerSectionEnd]
+	#print AnswerSection
+
+
+	Index=7
+	while(Index>-1):
+
+		IPStart = AnswerSection.find("	A	", Index) + 3
+
+		IPEnd = AnswerSection.find("\n", IPStart)
+
+		IPAddress = AnswerSection[IPStart:IPEnd]
+
+		print IPAddress
+
+		os.system("ufw reject out to "+IPAddress)
+
+		Index = AnswerSection.find(URL, IPEnd)
+		
+	
+"""	IPStart = AnswerSection.find("	A	", Index) + 3
+
+	IPEnd = AnswerSection.find("\n", IPStart)
+
+	IPAddress = AnswerSection[IPStart:IPEnd]
+
+	print IPAddress
+
+	Index = AnswerSection.find(URL)
+
+
+
+	IPStart = AnswerSection.find("	A	", Index) + 3
+
+	IPEnd = AnswerSection.find("\n", IPStart)
+
+	IPAddress = AnswerSection[IPStart:IPEnd]
+
+	print IPAddress
+
+	Index = AnswerSection.find(URL)
+
+
+
+	
+	IPStart = AnswerSection.find("	A	", Index) + 3
+
+	IPEnd = AnswerSection.find("\n", IPStart)
+
+	IPAddress = AnswerSection[IPStart:IPEnd]
+
+	print IPAddress
+
+	Index = AnswerSection.find(URL)
+
+	print Index
+
+
+	IPStart = AnswerSection.find("	A	", Index) + 3
+
+	print IPStart
+
+	IPEnd = AnswerSection.find("\n", IPStart)
+
+	IPAddress = AnswerSection[IPStart:IPEnd]
+
+	print IPAddress
+
+	Index = AnswerSection.find(URL)
+"""
+main()
